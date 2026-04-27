@@ -1,0 +1,1045 @@
+/* Postulantes ingresados */
+.applicant-ingresado {
+    background-color: #e0ffe0 !important;
+    transition: background-color 0.3s;
+}
+
+/* Postulantes retirados */
+.applicant-retirado {
+    background-color: #ffe0e0 !important;
+    transition: background-color 0.3s;
+}
+/* =========================================================================
+   VARIABLES Y TOKENS DE DISEÑO
+   ========================================================================= */
+:root {
+    /* Color Palette */
+    --primary: #137fec;
+    /* Azul de los diseños anteriores (STITCH) */
+    --primary-hover: #0e65bc;
+    --secondary: #2c3e50;
+    --success: #2ecc71;
+    --success-light: #d4edda;
+    --danger: #e74c3c;
+    --danger-hover: #c0392b;
+    --warning: #f1c40f;
+    --text-main: #34495e;
+    --text-muted: #7f8c8d;
+    --bg-main: #f8f9fc;
+    --bg-white: #ffffff;
+    --bg-sidebar: #ffffff;
+    --border-color: #e2e8f0;
+
+    /* Typography */
+    --font-family: 'Inter', sans-serif;
+
+    /* Shadows & Border Radius */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* =========================================================================
+   RESET GENÉRICO
+   ========================================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow: hidden;
+    /* Para que la SPA no tenga scroll completo, solo en áreas específicas */
+}
+
+/* =========================================================================
+   LAYOUT PRINCIPAL
+   ========================================================================= */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* =========================================================================
+   SIDEBAR
+   ========================================================================= */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    z-index: 10;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo-icon {
+    font-size: 28px;
+    color: var(--primary);
+}
+
+.sidebar-logo-img {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
+.sidebar-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--secondary);
+}
+
+.sidebar-header h2 span {
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.nav-btn:hover {
+    background-color: var(--bg-main);
+    color: var(--primary);
+}
+
+.nav-btn.active {
+    background-color: rgba(19, 127, 236, 0.08);
+    /* Fondo primario muy transparente */
+    color: var(--primary);
+    border-right: 3px solid var(--primary);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+}
+
+/* =========================================================================
+   MAIN CONTENT & HEADER
+   ========================================================================= */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.top-header {
+    height: 70px;
+    background-color: var(--bg-white);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.header-title h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.btn-success {
+    background-color: var(--success);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.user-greeting {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================================================================
+   VIEW SECTIONS
+   ========================================================================= */
+.view-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================================================
+   TOGGLE SWITCH (Ver Historial)
+   ========================================================================= */
+.section-actions {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--primary);
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* =========================================================================
+   TABLAS (Matriz, Postulantes, Historial)
+   ========================================================================= */
+.table-container {
+    background-color: var(--bg-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    overflow-x: auto;
+    /* Scroll horizontal si es necesario */
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.015);
+}
+
+.col-name {
+    min-width: 200px;
+}
+
+/* Matriz - Checkboxes y celdas pagadas */
+.matrix-table th {
+    text-align: center;
+}
+
+.matrix-table td:not(:nth-child(2)) {
+    /* Todo centrado menos el nombre */
+    text-align: center;
+}
+
+.month-cell {
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.month-cell.paid {
+    background-color: var(--success-light);
+}
+
+.check-paid {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--success);
+}
+
+/* Inquilinos pasados (Archivados) en la matriz */
+.tenant-archived {
+    background-color: #f7f7f7;
+    opacity: 0.6;
+}
+
+.tenant-archived td {
+    color: #999;
+}
+
+.tenant-archived input {
+    pointer-events: none;
+    /* No se puede modificar el historial */
+}
+
+/* Footer Matriz (Totales) */
+.matrix-table tfoot th {
+    background-color: var(--secondary);
+    color: white;
+}
+
+/* Botón/Nombre clickeable */
+.tenant-name-link {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tenant-name-link:hover {
+    color: var(--primary-hover);
+}
+
+/* =========================================================================
+   DASHBOARD HABITACIONES
+   ========================================================================= */
+.rooms-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.floor-section h2 {
+    font-size: 18px;
+    color: var(--secondary);
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+}
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.room-card {
+    background-color: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.room-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.room-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.room-price {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.room-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-free {
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+.status-occupied {
+    background-color: #fee2e2;
+    color: var(--danger);
+}
+
+.room-btn {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    width: 100%;
+}
+
+.room-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* =========================================================================
+   SEARCH BAR
+   ========================================================================= */
+.search-bar {
+    margin-bottom: 20px;
+    position: relative;
+    max-width: 400px;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-bar input:focus {
+    border-color: var(--primary);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+}
+
+/* =========================================================================
+   MODALES
+   ========================================================================= */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+    /* Para centrar con flexbox */
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--danger);
+}
+
+.modal-header {
+    padding: 25px 30px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+}
+
+.room-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.tenant-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-group label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.detail-group p {
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.fw-bold {
+    font-weight: 600;
+}
+
+hr {
+    border: 0;
+    border-top: 1px dashed var(--border-color);
+    margin: 20px 0;
+}
+
+.checkout-section h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: var(--secondary);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.mt-3 {
+    margin-top: 20px;
+}
+
+/* Buttons inside forms */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+}
+
+/* =========================================================================
+   RESPONSIVE DESIGN (Media Queries)
+   ========================================================================= */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 8px 10px;
+    }
+
+    .sidebar-header {
+        padding: 0 5px 5px;
+        border-bottom: none;
+    }
+
+    .sidebar-logo-img {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        max-width: 40px;
+        max-height: 40px;
+        flex-shrink: 0;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 5px 0;
+        gap: 10px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .sidebar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-btn {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: max-content;
+        padding: 8px 15px;
+        font-size: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        background: var(--bg-white);
+        justify-content: center;
+    }
+
+    .nav-btn.active {
+        border-right: none;
+        border-bottom: none;
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .top-header {
+        height: auto;
+        min-height: 50px;
+        padding: 8px 10px;
+    }
+
+    .header-title h1 {
+        font-size: 16px;
+    }
+
+    .header-user {
+        display: none;
+    }
+
+    /* Ocultar en mobile para espacio */
+
+    .view-section {
+        padding: 10px;
+    }
+
+    /* Tablas modo tarjeta en móviles (Todas) */
+    .data-table thead {
+        display: none;
+    }
+    .data-table, 
+    .data-table tbody, 
+    .data-table tr, 
+    .data-table td {
+        display: block;
+        width: 100%;
+    }
+    .data-table tr {
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--bg-white);
+        box-shadow: var(--shadow-sm);
+        padding: 10px;
+    }
+    .data-table td {
+        text-align: right;
+        padding: 8px 5px 8px 45%;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        min-height: 35px;
+        word-break: break-word;
+    }
+    .data-table td:last-child {
+        border-bottom: 0;
+    }
+    .data-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 5px;
+        top: 8px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 9px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        max-width: 40%;
+        line-height: 1.2;
+    }
+
+    .matrix-table tr {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .matrix-table td:nth-child(1),
+    .matrix-table td:nth-child(2),
+    .matrix-table td:nth-child(3) {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    
+    .matrix-table tfoot td:nth-child(1),
+    .matrix-table tfoot td:nth-child(2) {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    /* Grilla de 4 columnas para los meses */
+    .matrix-table tbody td:nth-child(n+4),
+    .matrix-table tfoot td:nth-child(n+3) {
+        flex: 0 0 25%;
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 5px !important;
+        min-height: auto;
+        border-bottom: 1px solid #efefef !important;
+        border-right: 1px solid #efefef;
+        box-sizing: border-box;
+    }
+    
+    /* Etiqueta del mes arriba de la celda */
+    .matrix-table tbody td:nth-child(n+4)::before,
+    .matrix-table tfoot td:nth-child(n+3)::before {
+        position: static !important;
+        text-align: center !important;
+        margin-bottom: 5px;
+        max-width: 100% !important;
+        transform: none !important;
+        font-size: 11px !important;
+    }
+
+    /* En tfoot, centrar texto de soles dentro del bloque de 1/4 */
+    .matrix-table tfoot td:nth-child(n+3) {
+        text-align: center;
+        font-size: 11px; /* Para que entren los montos de footer */
+    }
+
+    /* Optimizar Ficha Inquilino en móvil */
+    .tenant-details {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .modal-body {
+        padding: 15px;
+    }
+    .modal-header {
+        padding: 15px 20px 10px;
+    }
+    hr {
+        margin: 10px 0;
+    }
+    .checkout-section h3 {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    #checkout-notes {
+        height: 60px; /* Reducir altura del textarea */
+    }
+
+    .rooms-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+
+    .section-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .section-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .legend-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .legend-container .btn {
+        width: 100%;
+        margin-right: 0 !important;
+        margin-bottom: 5px;
+    }
+}
+
+/* Mensajes visuales de éxito y error */
+.alert-msg {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    padding: 16px 28px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    opacity: 0.97;
+    transition: opacity 0.3s;
+}
+.alert-success {
+    background: #e0ffe0;
+    color: #218838;
+    border: 1px solid #b2d8b2;
+}
+.alert-error {
+    background: #ffe0e0;
+    color: #c82333;
+    border: 1px solid #e0b2b2;
+}
+
+/* Floating Action Button (Mobile Only) */
+#mobile-save-fab {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background-color: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+#mobile-save-fab.hidden {
+    display: none !important;
+}
+#mobile-save-fab:hover,
+#mobile-save-fab:active {
+    opacity: 1;
+}

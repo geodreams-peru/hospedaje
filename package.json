@@ -1,0 +1,19 @@
+{
+  "name": "belu-hospedaje",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend Node.js para Belu Hospedaje",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "service:setup": "powershell -ExecutionPolicy Bypass -File ./scripts/install-startup-task.ps1",
+    "service:remove": "powershell -ExecutionPolicy Bypass -File ./scripts/remove-startup-task.ps1"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}

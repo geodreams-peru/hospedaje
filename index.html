@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Hospedaje Médico | Gestión Interna</title>
+    <link rel="icon" type="image/jpeg" href="img/logoBeluHospedaje.jpg">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Elements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css?v=20260327">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Menú Lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logoBeluHospedaje.jpg" alt="Belu Hospedaje" class="sidebar-logo-img">
+                <h2>Hospedaje<br><span>Médico</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-view="matrix-view">
+                    <i class="fa-solid fa-table-list"></i> Matriz Principal
+                </button>
+                <button class="nav-btn" data-view="rooms-view">
+                    <i class="fa-solid fa-bed"></i> Dashboard Habitaciones
+                </button>
+                <button class="nav-btn" data-view="applicants-view">
+                    <i class="fa-solid fa-clipboard-user"></i> Postulantes
+                </button>
+                <button class="nav-btn" data-view="prices-view">
+                    <i class="fa-solid fa-tag"></i> Editar Precios
+                </button>
+                <button class="nav-btn" data-view="history-view">
+                    <i class="fa-solid fa-box-archive"></i> Archivados / Historial
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Sistema de Gestión v1.0</p>
+                <p>&copy; 2026</p>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Header superior (opcional, para notificaciones o perfil) -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="current-view-title">Matriz Principal</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="global-export-btn" class="btn btn-success">
+                        <i class="fa-solid fa-floppy-disk"></i> Grabar
+                    </button>
+                    <label for="global-import-input" class="btn btn-secondary" style="cursor:pointer;margin-bottom:0;">
+                        <i class="fa-solid fa-upload"></i> Importar
+                        <input type="file" id="global-import-input" accept="application/json" style="display:none;">
+                    </label>
+                </div>
+                <div class="header-user">
+                    <span class="user-greeting">Hola, Administrador</span>
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                </div>
+            </header>
+
+            <!-- VISTAS DE LA APLICACIÓN -->
+
+            <!-- Vista 1: Matriz Principal -->
+            <section id="matrix-view" class="view-section active-view">
+                <div class="section-actions">
+                    <div class="toggle-container">
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-history">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label">Ver Inquilinos Anteriores (Historial)</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table matrix-table" id="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>N° Hab</th>
+                                <th class="col-name">Nombre Completo</th>
+                                <th>Precio</th>
+                                <th>ENE</th>
+                                <th>FEB</th>
+                                <th>MAR</th>
+                                <th>ABR</th>
+                                <th>MAY</th>
+                                <th>JUN</th>
+                                <th>JUL</th>
+                                <th>AGO</th>
+                                <th>SEP</th>
+                                <th>OCT</th>
+                                <th>NOV</th>
+                                <th>DIC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-tbody">
+                            <!-- Filas dinámicas aquí -->
+                        </tbody>
+                        <tfoot id="matrix-tfoot">
+                            <!-- Totales por mes aquí -->
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Vista 2: Dashboard Habitaciones -->
+            <section id="rooms-view" class="view-section hidden">
+                <div class="rooms-dashboard">
+                    <div class="floor-section">
+                        <h2>Piso 1</h2>
+                        <div class="rooms-grid" id="floor1-grid"></div>
+                    </div>
+                    <div class="floor-section">
+                        <h2>Piso 2</h2>
+                        <div class="rooms-grid" id="floor2-grid"></div>
+                    </div>
+                    <div class="floor-section">
+                        <h2>Piso 3</h2>
+                        <div class="rooms-grid" id="floor3-grid"></div>
+                    </div>
+                    <div class="floor-section">
+                        <h2>Cochera</h2>
+                        <div class="rooms-grid" id="garage-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vista 3: Postulantes -->
+            <section id="applicants-view" class="view-section hidden">
+                <div style="margin-bottom:10px;">
+                    <input type="text" id="applicants-search" placeholder="Buscar por nombre, DNI o celular..."
+                        class="search-input" style="max-width:320px;">
+                </div>
+                <div class="legend-container" style="margin-bottom: 10px;">
+                    <button id="reload-sheets-btn" class="btn btn-secondary" style="margin-right:14px;">
+                        <i class="fa-solid fa-rotate"></i> Recargar desde Sheets
+                    </button>
+                    <button id="add-applicant-btn" class="btn btn-success" style="margin-right:14px;">
+                        <i class="fa-solid fa-plus"></i> Agregar Postulante Manual
+                    </button>
+                    <span
+                        style="display:inline-block;width:18px;height:18px;background:#e0ffe0;border:1px solid #b2d8b2;margin-right:6px;vertical-align:middle;"></span>
+                    <span style="margin-right:20px;vertical-align:middle;">Inquilino</span>
+                    <span
+                        style="display:inline-block;width:18px;height:18px;background:#ffe0e0;border:1px solid #d8b2b2;margin-right:6px;vertical-align:middle;"></span>
+                    <span style="margin-right:20px;vertical-align:middle;">Retirado</span>
+                    <span
+                        style="display:inline-block;width:18px;height:18px;background:#fff;border:1px solid #ccc;margin-right:6px;vertical-align:middle;"></span>
+                    <span style="vertical-align:middle;">En Espera</span>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="applicants-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha Postulación</th>
+                                <th>Nombre Completo</th>
+                                <th>DNI</th>
+                                <th>Celular</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicants-tbody">
+                            <!-- Aquí se mostrarán los postulantes desde Google Sheets -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Vista 4: Editar Precios -->
+            <section id="prices-view" class="view-section hidden">
+                <div class="section-actions">
+                    <button id="save-prices-btn" class="btn btn-success">
+                        <i class="fa-solid fa-save"></i> Guardar Cambios de Precios
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="prices-table">
+                        <thead>
+                            <tr>
+                                <th>N° Habitación</th>
+                                <th>Piso</th>
+                                <th>Tipo</th>
+                                <th>Precio Actual (S/.)</th>
+                                <th>Nuevo Precio (S/.)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prices-tbody">
+                            <!-- Tabla de precios dinámica -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Vista 5: Archivados / Historial -->
+            <section id="history-view" class="view-section hidden">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="search-history" placeholder="Buscar por nombre o DNI...">
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Hab.</th>
+                                <th>Nombre Completo</th>
+                                <th>Fecha Ingreso</th>
+                                <th>Fecha Salida</th>
+                                <th>Evaluación / Comportamiento</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <!-- Historial aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODALES -->
+
+    <!-- Modal: Ficha del Inquilino (Retiro) -->
+    <div id="tenant-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fa-solid fa-times"></i></span>
+            <div class="modal-header">
+                <h2>Ficha del Inquilino</h2>
+                <span id="modal-room-badge" class="room-badge">Hab. 101</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="tenant-details">
+                    <div class="detail-group">
+                        <label>Nombre:</label>
+                        <p id="modal-tenant-name" class="fw-bold">Juan Perez</p>
+                    </div>
+                    <div class="detail-group">
+                        <label>DNI:</label>
+                        <p id="modal-tenant-dni">72345678</p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Celular:</label>
+                        <p id="modal-tenant-phone">999 888 777</p>
+                    </div>
+                    <div class="detail-group">
+                        <label>Dirección Anterior:</label>
+                        <p id="modal-tenant-address">Av. Siempre Viva 123</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="checkout-section">
+                    <h3>Proceso de Retiro</h3>
+                    <form id="checkout-form">
+                        <div class="form-group">
+                            <label for="checkout-date">Fecha de Salida:</label>
+                            <input type="date" id="checkout-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkout-notes">Evaluación (¿Cómo dejó la habitación/comportamiento?):</label>
+                            <textarea id="checkout-notes" rows="4"
+                                placeholder="Ej: Dejó el cuarto limpio. Siempre pagó a tiempo." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-block" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-sign-out-alt"></i> Finalizar Estadía / Retirar
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-block close-btn-action">
+                            <i class="fa-solid fa-arrow-left"></i> Salir
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Procesar Nuevo Ingreso (Asignar Habitación) -->
+    <div id="assign-room-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fa-solid fa-times"></i></span>
+            <div class="modal-header">
+                <h2>Asignar Habitación</h2>
+            </div>
+            <div class="modal-body">
+                <p>Asignando habitación a: <strong id="assign-tenant-name"></strong></p>
+                <form id="assign-room-form">
+                    <input type="hidden" id="assign-applicant-id">
+                    <div class="form-group mt-3">
+                        <label for="available-rooms-select">Seleccione Habitación Libre:</label>
+                        <select id="available-rooms-select" required>
+                            <!-- Opciones dinámicas -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkin-date">Fecha de Ingreso:</label>
+                        <input type="date" id="checkin-date" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-check"></i> Confirmar Ingreso
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Agregar Postulante Manual -->
+    <div id="add-applicant-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fa-solid fa-times"></i></span>
+            <div class="modal-header">
+                <h2>Agregar Postulante Manual</h2>
+            </div>
+            <div class="modal-body">
+                <form id="add-applicant-form">
+                    <div class="form-group">
+                        <label for="new-applicant-date">Fecha de Postulación:</label>
+                        <input type="date" id="new-applicant-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-applicant-name">Nombre Completo:</label>
+                        <input type="text" id="new-applicant-name" placeholder="Ej: Dr. Juan Pérez García" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-applicant-dni">DNI:</label>
+                        <input type="text" id="new-applicant-dni" placeholder="Ej: 12345678" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-applicant-phone">Celular:</label>
+                        <input type="text" id="new-applicant-phone" placeholder="Ej: 987654321" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-applicant-profession">Profesión/Especialidad:</label>
+                        <input type="text" id="new-applicant-profession" placeholder="Ej: Residente R1 - Cirugía">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-applicant-address">Dirección Anterior:</label>
+                        <input type="text" id="new-applicant-address" placeholder="Ej: Av. Arequipa 123">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">
+                        <i class="fa-solid fa-save"></i> Guardar Postulante
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Retiro -->
+    <div id="confirm-checkout-modal" class="modal" style="z-index: 10000;">
+        <div class="modal-content" style="background-color: var(--danger); color: white; max-width: 400px;">
+            <span class="close-modal" style="color: white;"><i class="fa-solid fa-times"></i></span>
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h2 style="color: white; font-size: 18px;"><i class="fa-solid fa-triangle-exclamation"></i> Confirmación de Retiro</h2>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; font-size: 15px; font-weight: 500;">
+                    ¿Estás totalmente seguro de que deseas retirar a este inquilino y finalizar su estadía? Esta acción pasará el inquilino al historial.
+                </p>
+                <div style="display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" id="btn-confirm-checkout" class="btn btn-block" style="background-color: #900; color: white;">
+                        <i class="fa-solid fa-check"></i> SÍ, RETIRAR INQUILINO
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-block close-btn-action" style="background-color: #fff; color: var(--danger);">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Guardado (Mobile) -->
+    <div id="confirm-save-modal" class="modal">
+        <div class="modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
+            <span class="close-modal"><i class="fa-solid fa-times"></i></span>
+            <div class="modal-header">
+                <h2>Confirmar Cambios</h2>
+            </div>
+            <div class="modal-body" style="overflow-y: auto;">
+                <p style="margin-bottom: 15px; font-size: 14px;">Se aplicarán los siguientes cambios seleccionados:</p>
+                <ul id="pending-changes-list"
+                    style="margin-bottom: 20px; font-size: 12px; color: var(--text-muted); padding-left: 20px; line-height: 1.5;">
+                    <!-- Nodos dinámicos -->
+                </ul>
+                <button id="mobile-confirm-save-btn" class="btn btn-success btn-block">
+                    <i class="fa-solid fa-check"></i> GRABAR Y SINCRONIZAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button (Mobile Only) -->
+    <button id="mobile-save-fab" class="hidden">
+        <i class="fa-solid fa-floppy-disk"></i> <span id="fab-changes-count">0</span> PENDIENTE(S) - GRABAR
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/app.js?v=20260327"></script>
+</body>
+
+</html>
