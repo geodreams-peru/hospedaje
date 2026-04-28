@@ -204,6 +204,15 @@ function hasAnyData(state) {
   );
 }
 
+function getStateRecordCount(state) {
+  if (!state || typeof state !== 'object') return 0;
+  return (
+    (Array.isArray(state.applicants) ? state.applicants.length : 0) +
+    (Array.isArray(state.activeTenants) ? state.activeTenants.length : 0) +
+    (Array.isArray(state.archivedTenants) ? state.archivedTenants.length : 0)
+  );
+}
+
 function getBackupRetention() {
   const value = Number(process.env.BACKUP_RETENTION || DEFAULT_BACKUP_RETENTION);
   if (!Number.isFinite(value) || value < 1) return DEFAULT_BACKUP_RETENTION;
@@ -333,8 +342,20 @@ async function saveState(state, options = {}) {
 
   validateStateIntegrity(nextState);
 
+  const currentState = await getState();
+  const currentTotalRecords = getStateRecordCount(currentState);
+  const incomingTotalRecords = getStateRecordCount(nextState);
+
+  if (!options.allowRiskyOverwrite && currentTotalRecords >= 10) {
+    const suspiciousMinimum = Math.max(3, Math.floor(currentTotalRecords * 0.3));
+    if (incomingTotalRecords <= suspiciousMinimum) {
+      throw new Error(
+        `Guardado bloqueado por seguridad: estado entrante demasiado pequeno (${incomingTotalRecords}) frente al actual (${currentTotalRecords}).`
+      );
+    }
+  }
+
   if (!options.skipSnapshot) {
-    const currentState = await getState();
     if (hasAnyData(currentState)) {
       await createSnapshot(options.snapshotReason || 'pre-save', currentState);
     }
@@ -590,5 +611,6 @@ module.exports = {
   listSnapshots,
   restoreSnapshot,
   createManualSnapshot,
-  getAuditLogs
+  getAuditLogs,
+  getDatabasePath: () => dbPath
 };

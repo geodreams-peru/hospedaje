@@ -144,11 +144,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            let payload = null;
+            try {
+                payload = await response.json();
+            } catch (_parseError) {
+                payload = null;
             }
+
+            if (!response.ok) {
+                const detail = payload && payload.error ? `: ${payload.error}` : '';
+                throw new Error(`HTTP ${response.status}${detail}`);
+            }
+
+            return true;
         } catch (error) {
             console.warn('No se pudo persistir en Node API:', error);
+            mostrarMensaje(`No se pudo guardar en servidor (${error.message}).`, 'error');
+            return false;
         }
     }
 

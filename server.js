@@ -10,7 +10,8 @@ const {
   listSnapshots,
   restoreSnapshot,
   createManualSnapshot,
-  getAuditLogs
+  getAuditLogs,
+  getDatabasePath
 } = require('./src/db');
 
 dotenv.config();
@@ -70,9 +71,32 @@ app.get('/api/state', async (_req, res, next) => {
 
 app.post('/api/state', async (req, res, next) => {
   try {
-    await saveState(req.body || {});
+    const forceOverwrite = ['1', 'true', 'yes'].includes((req.get('x-force-overwrite') || '').trim().toLowerCase());
+    const canForce = forceOverwrite && adminToken && getRequestAdminToken(req) === adminToken;
+
+    await saveState(req.body || {}, {
+      allowRiskyOverwrite: canForce
+    });
     const state = await getState();
     res.json({ ok: true, state });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/diagnostics/counts', async (_req, res, next) => {
+  try {
+    const state = await getState();
+    res.json({
+      ok: true,
+      dbPath: getDatabasePath(),
+      counts: {
+        applicants: state.applicants.length,
+        activeTenants: state.activeTenants.length,
+        archivedTenants: state.archivedTenants.length,
+        roomPrices: Object.keys(state.roomPrices || {}).length
+      }
+    });
   } catch (error) {
     next(error);
   }
